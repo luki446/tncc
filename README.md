@@ -1,2 +1,4 @@
-# tncc
-Totally Not C Compiler
+
+# Totally Not C Compiler
+
+Small C99 compiler written in modern C++
