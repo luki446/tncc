@@ -32,13 +32,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 
 # Unit tests
-file(GLOB PROJECT_LIB_FILES src/*.cpp src/*.h)
-list(FILTER PROJECT_LIB_FILES EXCLUDE REGEX ".*main.cpp$")
-add_library(tncc_lib ${PROJECT_LIB_FILES})
-
-include_directories(src/ deps/fmt/include)
-
 if( ${CMAKE_BUILD_TYPE} MATCHES "Debug" )
+    file(GLOB PROJECT_LIB_FILES src/*.cpp src/*.h)
+    list(FILTER PROJECT_LIB_FILES EXCLUDE REGEX ".*main.cpp$")
+    add_library(tncc_lib ${PROJECT_LIB_FILES})
+
+    include_directories(src/ deps/fmt/include)
+
     file(GLOB TEST_FILES tests/*.cpp)
 
     foreach(file ${TEST_FILES})
