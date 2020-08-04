@@ -8,7 +8,7 @@ TEST(lexerTest, simpleReturnTest)
     
     EXPECT_EQ(tokens.size(), 3);
 
-    EXPECT_EQ(tokens[0].type, TokenType::TK_RETURN);
-    EXPECT_EQ(tokens[1].type, TokenType::TK_NUM_LITERAL);
-    EXPECT_EQ(tokens[2].type, TokenType::TK_SEMICOLON);
+    EXPECT_EQ(TokenType::TK_RETURN, tokens[0].type);
+    EXPECT_EQ(TokenType::TK_NUM_LITERAL, tokens[1].type);
+    EXPECT_EQ(TokenType::TK_SEMICOLON, tokens[2].type);
 }
