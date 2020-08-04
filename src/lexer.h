@@ -1,12 +1,10 @@
 #pragma once
 
+#include <ctype.h>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <vector>
-#include <ctype.h>
-
-#define KEYWORD(x, y) if(ident == x)\
-type = TokenType::y;\
 
 #ifdef DEBUG
 #define PRINT_DEBUG_TOKENS(x) print_tokens(x);
@@ -49,11 +47,13 @@ enum class TokenType {
     TK_EXTERN,
     TK_FOR,
     TK_IF,
+    TK_INLINE,
     TK_GOTO,
     TK_FLOAT,
     TK_INT,
     TK_LONG,
     TK_REGISTER,
+    TK_RESTRICT,
     TK_RETURN,
     TK_SIGNED,
     TK_STATIC,
@@ -68,6 +68,10 @@ enum class TokenType {
     TK_VOLATILE,
     TK_UNSIGNED,
 
+    TK_BOOL,
+    TK_COMPLEX,
+    TK_IMAGINARY,
+
     TK_NUM_LITERAL,
 };
 
@@ -78,7 +82,7 @@ struct Token {
 
 class Lexer {
 public:
-    explicit Lexer(std::string_view source);
+    explicit Lexer(std::string_view&& source);
     auto lex() -> const std::vector<Token>;
 
 private:
@@ -89,6 +93,8 @@ private:
     uint32_t line;
     uint32_t position;
     std::string_view src;
+
+    static const std::unordered_map<std::string_view, TokenType> keysMap;
 };
 
 #ifdef DEBUG
