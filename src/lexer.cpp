@@ -15,6 +15,7 @@ auto Lexer::lex() -> const std::vector<Token>
     char current;
 
     while ((current = next()) != '\0') {
+        uint32_t currentColumn = column;
         switch (current) {
         case '(':
         case ')':
@@ -24,11 +25,17 @@ auto Lexer::lex() -> const std::vector<Token>
         case ']':
         case ',':
         case ';':
-            tokens.push_back({ static_cast<TokenType>(current), "" });
+            tokens.emplace_back(
+                static_cast<TokenType>(current),
+                line,
+                currentColumn);
             break;
         case '*':
             if (peek() != '=') {
-                tokens.push_back({ static_cast<TokenType>('*'), "" });
+                tokens.emplace_back(
+                    static_cast<TokenType>('*'), 
+                    line,
+                    currentColumn);
             }
             break;
         default:
@@ -41,9 +48,17 @@ auto Lexer::lex() -> const std::vector<Token>
                 const auto ident = src.substr(start, length);
 
                 if (Lexer::keysMap.contains(ident)) {
-                    tokens.push_back({ Lexer::keysMap.at(ident), ident });
+                    tokens.emplace_back(
+                        Lexer::keysMap.at(ident), 
+                        line,
+                        currentColumn,
+                        ident);
                 } else {
-                    tokens.push_back({ TokenType::TK_IDENT, ident });
+                    tokens.emplace_back(
+                        TokenType::TK_IDENT,
+                        line,
+                        currentColumn,
+                        ident);
                 }
 
             } else if (std::isdigit(current)) {
@@ -56,7 +71,11 @@ auto Lexer::lex() -> const std::vector<Token>
 
                 const auto num = src.substr(start, length);
 
-                tokens.push_back({ TokenType::TK_NUM_LITERAL, num });
+                tokens.emplace_back(
+                    TokenType::TK_NUM_LITERAL,
+                    line,
+                    currentColumn,
+                    num);
             }
         }
     }
@@ -120,14 +139,30 @@ const std::unordered_map<std::string_view, TokenType> Lexer::keysMap {
     { "_Imaginary", TokenType::TK_IMAGINARY },
 };
 
+Token::Token(TokenType type, uint32_t line, uint32_t column, std::string_view value)
+    : type(type)
+    , line(line)
+    , column(column)
+    , value(value)
+{
+}
+
+Token::Token(TokenType type, uint32_t line, uint32_t column)
+    : type(type)
+    , line(line)
+    , column(column)
+    , value("")
+{
+}
+
 #ifdef DEBUG
 void print_tokens(const std::vector<Token>& tokens)
 {
     for (const auto& tok : tokens) {
         if (tok.value == "") {
-            fmt::print("Token: {}\n", static_cast<char>(tok.type));
+            fmt::print("{{ '{}', line: {}, column: {}}}\n", static_cast<char>(tok.type), tok.line, tok.column);
         } else {
-            fmt::print("Token: {}\n", tok.value);
+            fmt::print("{{ \"{}\", line : {}, column: {}}}\n", tok.value, tok.line, tok.column);
         }
     }
 }

@@ -78,6 +78,10 @@ enum class TokenType {
 struct Token {
     TokenType type;
     std::string_view value;
+    uint32_t line;
+    uint32_t column;
+    Token(TokenType type, uint32_t line, uint32_t column, std::string_view value);
+    Token(TokenType type, uint32_t line, uint32_t column);
 };
 
 class Lexer {
