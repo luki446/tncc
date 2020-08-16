@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include <variant>
+#include <cstdlib>
 
 #ifdef DEBUG
 #define PRINT_DEBUG_TOKENS(x) print_tokens(x);
@@ -74,6 +75,7 @@ enum class TokenType {
     TK_IMAGINARY,
 
     TK_NUM_LITERAL,
+    TK_CHAR_LITERAL,
 };
 
 using TokenValue = std::variant<std::string_view, char, uint64_t, double>;

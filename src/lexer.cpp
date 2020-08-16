@@ -11,11 +11,17 @@ Lexer::Lexer(std::string_view&& source)
 auto Lexer::lex() -> const std::vector<Token>
 {
     std::vector<Token> tokens;
+    uint32_t currentColumn;
+
+    uint32_t start = position;
+    uint32_t length = 0;
+
+    std::string_view rawToken;
 
     char current;
 
     while ((current = next()) != '\0') {
-        uint32_t currentColumn = column;
+        currentColumn = column;
         switch (current) {
         case '(':
         case ')':
@@ -38,44 +44,117 @@ auto Lexer::lex() -> const std::vector<Token>
                     currentColumn);
             }
             break;
+        case '\'':
+            start = position;
+            length = 0;
+
+            for (auto nextChar = peek(); nextChar != '\''; next(), nextChar = peek()) {
+                length++;
+            }
+            next();
+            rawToken = src.substr(start, length);
+
+            switch (rawToken.size()) {
+            case 0:
+                // TODO: Error handling for empty char constant
+            case 1:
+                tokens.emplace_back(TokenType::TK_CHAR_LITERAL,
+                    line,
+                    currentColumn,
+                    rawToken[0]);
+                break;
+            case 2:
+                if (rawToken[0] == '\\') {
+                    char asciiValue;
+                    switch (rawToken[1]) {
+                    case 'a':
+                        asciiValue = 0x07;
+                        break;
+                    case 'b':
+                        asciiValue = 0x08;
+                        break;
+                    case 'e':
+                        asciiValue = 0x1B;
+                        break;
+                    case 'f':
+                        asciiValue = 0x0C;
+                        break;
+                    case 'n':
+                        asciiValue = 0x0A;
+                        break;
+                    case 'r':
+                        asciiValue = 0x0D;
+                        break;
+                    case 't':
+                        asciiValue = 0x09;
+                        break;
+                    case 'v':
+                        asciiValue = 0x0B;
+                        break;
+                    case '\\':
+                        asciiValue = 0x5C;
+                        break;
+                    case '\'':
+                        asciiValue = 0x27;
+                        break;
+                    case '\"':
+                        asciiValue = 0x22;
+                        break;
+                    case '?':
+                        asciiValue = 0x3F;
+                        break;
+                        //default:
+                        // TODO: Error handling invalid escape characters
+                    }
+                    tokens.emplace_back(TokenType::TK_CHAR_LITERAL,
+                        line,
+                        currentColumn,
+                        asciiValue);
+                } else {
+                    // TODO: Error handling for incorrect escape characters
+                }
+            //default:
+                // TODO: Error handling for too long char literal
+            }
+            break;
         default:
             if (std::isalpha(current) || current == '_') {
-                auto start = position - 1;
-                auto length = 1;
+                start = position - 1;
+                length = 1;
                 for (auto nextChar = peek(); std::isalnum(nextChar) || nextChar == '_'; next(), nextChar = peek()) {
                     length++;
                 }
-                const auto ident = src.substr(start, length);
+                rawToken = src.substr(start, length);
 
-                if (Lexer::keysMap.contains(ident)) {
+                if (Lexer::keysMap.contains(rawToken)) {
                     tokens.emplace_back(
-                        Lexer::keysMap.at(ident),
+                        Lexer::keysMap.at(rawToken),
                         line,
                         currentColumn,
-                        ident);
+                        rawToken);
                 } else {
                     tokens.emplace_back(
                         TokenType::TK_IDENT,
                         line,
                         currentColumn,
-                        ident);
+                        rawToken);
                 }
 
             } else if (std::isdigit(current)) {
-                auto start = position - 1;
-                auto length = 1;
+                start = position - 1;
+                length = 1;
 
                 for (auto nextChar = peek(); std::isdigit(nextChar); next(), nextChar = peek()) {
                     length++;
                 }
 
-                const auto num = src.substr(start, length);
+                rawToken = src.substr(start, length);
 
                 tokens.emplace_back(
                     TokenType::TK_NUM_LITERAL,
                     line,
                     currentColumn,
-                    num);
+                    rawToken);
             }
         }
     }
@@ -165,6 +244,8 @@ void print_tokens(const std::vector<Token>& tokens)
             } else {
                 fmt::print("{{ \"{}\", line : {}, column: {}}}\n", *valuePointer, tok.line, tok.column);
             }
+        } else if (auto valuePointer = std::get_if<char>(&tok.value)) {
+            fmt::print("{{ '{}', line : {}, column: {}}}\n", *valuePointer, tok.line, tok.column);
         }
     }
 }
