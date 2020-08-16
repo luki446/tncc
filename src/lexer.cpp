@@ -33,7 +33,7 @@ auto Lexer::lex() -> const std::vector<Token>
         case '*':
             if (peek() != '=') {
                 tokens.emplace_back(
-                    static_cast<TokenType>('*'), 
+                    static_cast<TokenType>('*'),
                     line,
                     currentColumn);
             }
@@ -49,7 +49,7 @@ auto Lexer::lex() -> const std::vector<Token>
 
                 if (Lexer::keysMap.contains(ident)) {
                     tokens.emplace_back(
-                        Lexer::keysMap.at(ident), 
+                        Lexer::keysMap.at(ident),
                         line,
                         currentColumn,
                         ident);
@@ -139,7 +139,7 @@ const std::unordered_map<std::string_view, TokenType> Lexer::keysMap {
     { "_Imaginary", TokenType::TK_IMAGINARY },
 };
 
-Token::Token(TokenType type, uint32_t line, uint32_t column, std::string_view value)
+Token::Token(TokenType type, uint32_t line, uint32_t column, TokenValue value)
     : type(type)
     , line(line)
     , column(column)
@@ -159,10 +159,12 @@ Token::Token(TokenType type, uint32_t line, uint32_t column)
 void print_tokens(const std::vector<Token>& tokens)
 {
     for (const auto& tok : tokens) {
-        if (tok.value == "") {
-            fmt::print("{{ '{}', line: {}, column: {}}}\n", static_cast<char>(tok.type), tok.line, tok.column);
-        } else {
-            fmt::print("{{ \"{}\", line : {}, column: {}}}\n", tok.value, tok.line, tok.column);
+        if (auto valuePointer = std::get_if<std::string_view>(&tok.value)) {
+            if (*valuePointer == "") {
+                fmt::print("{{ '{}', line: {}, column: {}}}\n", static_cast<char>(tok.type), tok.line, tok.column);
+            } else {
+                fmt::print("{{ \"{}\", line : {}, column: {}}}\n", *valuePointer, tok.line, tok.column);
+            }
         }
     }
 }

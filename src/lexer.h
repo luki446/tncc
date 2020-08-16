@@ -5,6 +5,7 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
+#include <variant>
 
 #ifdef DEBUG
 #define PRINT_DEBUG_TOKENS(x) print_tokens(x);
@@ -75,12 +76,15 @@ enum class TokenType {
     TK_NUM_LITERAL,
 };
 
+using TokenValue = std::variant<std::string_view, char, uint64_t, double>;
+
 struct Token {
     TokenType type;
-    std::string_view value;
+    TokenValue value;
     uint32_t line;
     uint32_t column;
-    Token(TokenType type, uint32_t line, uint32_t column, std::string_view value);
+
+    Token(TokenType type, uint32_t line, uint32_t column, TokenValue value);
     Token(TokenType type, uint32_t line, uint32_t column);
 };
 
