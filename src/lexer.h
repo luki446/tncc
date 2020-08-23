@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
-
+#include <charconv>
 
 #ifdef DEBUG
 #define PRINT_DEBUG_TOKENS(x) print_tokens(x);
@@ -79,7 +79,7 @@ enum class TokenType {
     TK_CHAR_LITERAL,
 };
 
-using TokenValue = std::variant<std::string_view, char, uint64_t, double>;
+using TokenValue = std::variant<std::string_view, char, int32_t, double>;
 
 struct Token {
     TokenType type;
@@ -89,6 +89,10 @@ struct Token {
 
     Token(TokenType type, uint32_t line, uint32_t column, TokenValue value);
     Token(TokenType type, uint32_t line, uint32_t column);
+
+    auto operator==(const Token& rhs) const -> bool{
+        return type == rhs.type && value == rhs.value;
+    }
 };
 
 class Lexer {

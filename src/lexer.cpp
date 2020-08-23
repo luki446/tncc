@@ -156,11 +156,15 @@ auto Lexer::lex() -> const std::vector<Token>
 
                 rawToken = src.substr(start, length);
 
+                int result = -1234;
+
+                std::from_chars(rawToken.begin(), rawToken.end(), result);
+
                 tokens.emplace_back(
                     TokenType::TK_NUM_LITERAL,
                     line,
                     currentColumn,
-                    rawToken);
+                    result);
             }
         }
     }
@@ -252,6 +256,8 @@ void print_tokens(const std::vector<Token>& tokens)
             }
         } else if (auto valuePointer = std::get_if<char>(&tok.value)) {
             fmt::print("{{ '{}', line : {}, column: {}}}\n", *valuePointer, tok.line, tok.column);
+        } else if (auto valuePointer = std::get_if<int32_t>(&tok.value)) {
+            fmt::print("{{ {}, line: {}, column: {} }}\n", *valuePointer, tok.line, tok.column);
         }
     }
 }
