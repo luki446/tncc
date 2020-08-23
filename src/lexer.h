@@ -1,12 +1,13 @@
 #pragma once
 
+#include <cstdlib>
 #include <ctype.h>
 #include <string>
 #include <string_view>
 #include <unordered_map>
-#include <vector>
 #include <variant>
-#include <cstdlib>
+#include <vector>
+
 
 #ifdef DEBUG
 #define PRINT_DEBUG_TOKENS(x) print_tokens(x);
@@ -100,9 +101,9 @@ private:
     [[nodiscard]] auto peek() const -> char;
 
     std::string_view src;
-    uint32_t column{0};
-    uint32_t line{1};
-    uint32_t position{0};
+    uint32_t column { 0 };
+    uint32_t line { 1 };
+    uint32_t position { 0 };
 
     static const std::unordered_map<std::string_view, TokenType> keysMap;
 };
