@@ -99,10 +99,10 @@ private:
     auto next() -> char;
     [[nodiscard]] auto peek() const -> char;
 
-    uint32_t column;
-    uint32_t line;
-    uint32_t position;
     std::string_view src;
+    uint32_t column{0};
+    uint32_t line{1};
+    uint32_t position{0};
 
     static const std::unordered_map<std::string_view, TokenType> keysMap;
 };

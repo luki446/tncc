@@ -1,10 +1,7 @@
 #include "lexer.h"
 
 Lexer::Lexer(std::string_view&& source)
-    : src(std::move(source))
-    , column(0)
-    , line(1)
-    , position(0)
+    : src(source)
 {
 }
 
