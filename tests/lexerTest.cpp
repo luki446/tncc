@@ -1,11 +1,12 @@
-#include "gtest/gtest.h"
 #include "lexer.h"
+#include "gtest/gtest.h"
+
 
 TEST(lexerTest, simpleReturnTest)
 {
     const char* source = "return 3;";
-    const auto tokens = Lexer{source}.lex();
-    
+    const auto tokens = Lexer { source }.lex();
+
     EXPECT_EQ(tokens.size(), 3);
 
     EXPECT_EQ(TokenType::TK_RETURN, tokens[0].type);
@@ -16,12 +17,12 @@ TEST(lexerTest, simpleReturnTest)
 TEST(lexerTest, charLiteralTest)
 {
     const char* source = "char x = 'x';";
-    const auto tokens = Lexer{source}.lex();
+    const auto tokens = Lexer { source }.lex();
 
     EXPECT_EQ(5, tokens.size());
-    
+
     EXPECT_EQ(TokenType::TK_CHAR, tokens[0].type);
-    
+
     EXPECT_EQ(TokenType::TK_IDENT, tokens[1].type);
     EXPECT_EQ("x", std::get<std::string_view>(tokens[1].value));
 
