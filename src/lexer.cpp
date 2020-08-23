@@ -41,6 +41,15 @@ auto Lexer::lex() -> const std::vector<Token>
                     currentColumn);
             }
             break;
+        case '=':
+            if(peek() != '=') {
+                tokens.emplace_back(
+                    static_cast<TokenType>('='),
+                    line,
+                    currentColumn
+                );
+            }
+            break;
         case '\'':
             start = position;
             length = 0;
