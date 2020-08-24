@@ -1,6 +1,6 @@
 #include "lexer.h"
 
-Lexer::Lexer(std::string_view&& source)
+Lexer::Lexer(std::string_view source)
     : src(source)
 {
 }
@@ -42,12 +42,11 @@ auto Lexer::lex() -> const std::vector<Token>
             }
             break;
         case '=':
-            if(peek() != '=') {
+            if (peek() != '=') {
                 tokens.emplace_back(
                     static_cast<TokenType>('='),
                     line,
-                    currentColumn
-                );
+                    currentColumn);
             }
             break;
         case '\'':
@@ -137,7 +136,7 @@ auto Lexer::lex() -> const std::vector<Token>
                         Lexer::keysMap.at(rawToken),
                         line,
                         currentColumn,
-                        rawToken);
+                        "");
                 } else {
                     tokens.emplace_back(
                         TokenType::TK_IDENT,
@@ -228,37 +227,9 @@ const std::unordered_map<std::string_view, TokenType> Lexer::keysMap {
     { "_Imaginary", TokenType::TK_IMAGINARY },
 };
 
-Token::Token(TokenType type, uint32_t line, uint32_t column, TokenValue value)
-    : type(type)
-    , value(value)
-    , line(line)
-    , column(column)
-{
-}
-
-Token::Token(TokenType type, uint32_t line, uint32_t column)
-    : type(type)
-    , value("")
-    , line(line)
-    , column(column)
-{
-}
-
 #ifdef DEBUG
 void print_tokens(const std::vector<Token>& tokens)
 {
-    for (const auto& tok : tokens) {
-        if (auto valuePointer = std::get_if<std::string_view>(&tok.value)) {
-            if (*valuePointer == "") {
-                fmt::print("{{ '{}', line: {}, column: {}}}\n", static_cast<char>(tok.type), tok.line, tok.column);
-            } else {
-                fmt::print("{{ \"{}\", line : {}, column: {}}}\n", *valuePointer, tok.line, tok.column);
-            }
-        } else if (auto valuePointer = std::get_if<char>(&tok.value)) {
-            fmt::print("{{ '{}', line : {}, column: {}}}\n", *valuePointer, tok.line, tok.column);
-        } else if (auto valuePointer = std::get_if<int32_t>(&tok.value)) {
-            fmt::print("{{ {}, line: {}, column: {} }}\n", *valuePointer, tok.line, tok.column);
-        }
-    }
+    fmt::print("{}\n", tokens);
 }
 #endif
