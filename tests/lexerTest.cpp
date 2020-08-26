@@ -30,3 +30,20 @@ TEST(lexerTest, charLiteralTest)
 
     EXPECT_EQ(desiredTokens, tokens);
 }
+
+TEST(lexerTest, stringLiteralTest)
+{
+    const char* source = "char* x = \"Foo bar\";";
+    const auto tokens = Lexer { source }.lex();
+
+    const std::vector<Token> desiredTokens {
+        Token { TokenType::TK_CHAR, 0, 0 },
+        Token { TokenType::TK_STAR, 0, 0 },
+        Token { TokenType::TK_IDENT, 0, 0, "x" },
+        Token { TokenType::TK_ASSIGNMENT, 0, 0 },
+        Token { TokenType::TK_STRING_LITERAL, 0, 0, "Foo bar"},
+        Token { TokenType::TK_SEMICOLON, 0, 0},
+    };
+
+    EXPECT_EQ(desiredTokens, tokens);
+}
