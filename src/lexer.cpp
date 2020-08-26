@@ -49,6 +49,25 @@ auto Lexer::lex() -> const std::vector<Token>
                     currentColumn);
             }
             break;
+        case '"':
+            start = position;
+            length = 0;
+
+            for (auto nextChar = peek(); nextChar != '"'; next(), nextChar = peek()) {
+                if (nextChar == '\n') {
+                    // TODO: No new line characters in string literal
+                }
+                length++;
+            }
+            // TODO: Escape characters
+            next();
+
+            tokens.emplace_back(TokenType::TK_STRING_LITERAL, 
+                line, 
+                currentColumn, 
+                src.substr(start, length));
+
+            break;
         case '\'':
             start = position;
             length = 0;

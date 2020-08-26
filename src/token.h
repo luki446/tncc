@@ -76,6 +76,7 @@ enum class TokenType : uint16_t {
 
     TK_NUM_LITERAL,
     TK_CHAR_LITERAL,
+    TK_STRING_LITERAL,
 };
 
 using TokenValue = std::variant<std::string_view, char, int32_t, double>;
@@ -183,6 +184,8 @@ struct fmt::formatter<Token> {
         return fmt::format_to(ctx.out(), "Char literal: '{}'", std::get<char>(token.value));
     case TokenType::TK_NUM_LITERAL:
         return fmt::format_to(ctx.out(), "Integer literal: {}", std::get<int32_t>(token.value));
+    case TokenType::TK_STRING_LITERAL:
+        return fmt::format_to(ctx.out(), "String literal: \"{}\"", std::get<std::string_view>(token.value));
     case TokenType::TK_IDENT:
         return fmt::format_to(ctx.out(), "Identifier: {}", std::get<std::string_view>(token.value));
     default:
