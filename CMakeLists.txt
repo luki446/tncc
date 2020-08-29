@@ -55,7 +55,7 @@ if( ${CMAKE_BUILD_TYPE} MATCHES "Debug" )
 
 endif()
 # tncc
-file(GLOB PROJECT_FILES src/*.cpp)
+file(GLOB PROJECT_FILES src/*.cpp src/**/*.cpp)
 
 add_executable(${PROJECT_NAME} ${PROJECT_FILES})
 

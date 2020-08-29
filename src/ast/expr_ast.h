@@ -3,5 +3,5 @@
 
 class ExprAST {
 public:
-    virtual ~ExprAST() = 0;
+    virtual ~ExprAST() {};
 };
