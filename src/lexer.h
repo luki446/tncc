@@ -19,8 +19,8 @@
 
 class Lexer {
 public:
-    explicit Lexer(std::string_view source);
-    auto lex() -> const std::vector<Token>;
+    explicit Lexer(std::string_view const source);
+    auto lex() -> std::vector<Token> const;
 
 private:
     auto next() -> char;
@@ -31,9 +31,9 @@ private:
     uint32_t line { 1 };
     uint32_t position { 0 };
 
-    static const std::unordered_map<std::string_view, TokenType> keysMap;
+    static std::unordered_map<std::string_view, TokenType> const keysMap;
 };
 
 #ifdef DEBUG
-void print_tokens(const std::vector<Token>& tokens);
+void print_tokens(std::vector<Token> const& tokens);
 #endif

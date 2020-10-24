@@ -1,11 +1,11 @@
 #include "lexer.h"
 
-Lexer::Lexer(std::string_view source)
-    : src(source)
+Lexer::Lexer(std::string_view const source)
+    : src { source }
 {
 }
 
-auto Lexer::lex() -> const std::vector<Token>
+auto Lexer::lex() -> std::vector<Token> const
 {
     std::vector<Token> tokens;
     uint32_t currentColumn;
@@ -62,9 +62,9 @@ auto Lexer::lex() -> const std::vector<Token>
             // TODO: Escape characters
             next();
 
-            tokens.emplace_back(TokenType::TK_STRING_LITERAL, 
-                line, 
-                currentColumn, 
+            tokens.emplace_back(TokenType::TK_STRING_LITERAL,
+                line,
+                currentColumn,
                 src.substr(start, length));
 
             break;
@@ -206,7 +206,7 @@ auto Lexer::peek() const -> char
     return src[position];
 }
 
-const std::unordered_map<std::string_view, TokenType> Lexer::keysMap {
+std::unordered_map<std::string_view, TokenType> const Lexer::keysMap {
     { "auto", TokenType::TK_AUTO },
     { "break", TokenType::TK_BREAK },
     { "case", TokenType::TK_CASE },
@@ -247,7 +247,7 @@ const std::unordered_map<std::string_view, TokenType> Lexer::keysMap {
 };
 
 #ifdef DEBUG
-void print_tokens(const std::vector<Token>& tokens)
+void print_tokens(std::vector<Token> const& tokens)
 {
     fmt::print("{}\n", tokens);
 }

@@ -89,6 +89,10 @@ struct Token {
 
     Token(TokenType type, uint32_t line, uint32_t column, TokenValue value);
     Token(TokenType type, uint32_t line, uint32_t column);
+    #ifdef DEBUG
+    Token(TokenType type);
+    Token(TokenType type, TokenValue value);
+    #endif
 
     auto operator==(const Token& rhs) const -> bool;
 };
@@ -103,7 +107,7 @@ struct fmt::formatter<Token> {
     }
 
     template <typename FormatContext>
-    auto format(const Token& token, FormatContext& ctx)
+    auto format(Token const& token, FormatContext& ctx)
     {
     switch (token.type) {
     case TokenType::TK_AUTO:
@@ -207,14 +211,14 @@ struct fmt::formatter<std::vector<Token>> {
     }
 
     template <typename FormatContext>
-    auto format(const std::vector<Token>& tokens, FormatContext& ctx)
+    auto format(std::vector<Token> const& tokens, FormatContext& ctx)
     {
         if (tokens.size() == 0) {
             return fmt::format_to(ctx.out(), "{{}}");
         }
 
         fmt::format_to(ctx.out(), "{{\n");
-        for (const auto& tok : tokens) {
+        for (auto const& tok : tokens) {
             fmt::format_to(ctx.out(), "\t{},\n", tok);
         }
         return fmt::format_to(ctx.out(), "}}");

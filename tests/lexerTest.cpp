@@ -3,13 +3,13 @@
 
 TEST(lexerTest, simpleReturnTest)
 {
-    const char* source = "return 3;";
-    const auto tokens = Lexer { source }.lex();
+    std::string_view const source = "return 3;";
+    auto const tokens = Lexer { source }.lex();
 
-    const std::vector<Token> desiredTokens {
-        Token { TokenType::TK_RETURN, 0, 0 },
-        Token { TokenType::TK_NUM_LITERAL, 0, 0, 3 },
-        Token { TokenType::TK_SEMICOLON, 0, 0 },
+    std::vector<Token> const desiredTokens {
+        Token { TokenType::TK_RETURN },
+        Token { TokenType::TK_NUM_LITERAL, 3 },
+        Token { TokenType::TK_SEMICOLON },
     };
 
     EXPECT_EQ(desiredTokens, tokens);
@@ -17,15 +17,15 @@ TEST(lexerTest, simpleReturnTest)
 
 TEST(lexerTest, charLiteralTest)
 {
-    const char* source = "char x = 'x';";
-    const auto tokens = Lexer { source }.lex();
+    std::string_view const source = "char x = 'x';";
+    auto const tokens = Lexer { source }.lex();
 
-    const std::vector<Token> desiredTokens {
-        Token { TokenType::TK_CHAR, 0, 0 },
-        Token { TokenType::TK_IDENT, 0, 0, "x" },
-        Token { TokenType::TK_ASSIGNMENT, 0, 0 },
-        Token { TokenType::TK_CHAR_LITERAL, 0, 0, 'x' },
-        Token { TokenType::TK_SEMICOLON, 0, 0 },
+    std::vector<Token> const desiredTokens {
+        Token { TokenType::TK_CHAR },
+        Token { TokenType::TK_IDENT, "x" },
+        Token { TokenType::TK_ASSIGNMENT },
+        Token { TokenType::TK_CHAR_LITERAL, 'x' },
+        Token { TokenType::TK_SEMICOLON },
     };
 
     EXPECT_EQ(desiredTokens, tokens);
@@ -33,16 +33,16 @@ TEST(lexerTest, charLiteralTest)
 
 TEST(lexerTest, stringLiteralTest)
 {
-    const char* source = "char* x = \"Foo bar\";";
-    const auto tokens = Lexer { source }.lex();
+    std::string_view const source = "char* x = \"Foo bar\";";
+    auto const tokens = Lexer { source }.lex();
 
-    const std::vector<Token> desiredTokens {
-        Token { TokenType::TK_CHAR, 0, 0 },
-        Token { TokenType::TK_STAR, 0, 0 },
-        Token { TokenType::TK_IDENT, 0, 0, "x" },
-        Token { TokenType::TK_ASSIGNMENT, 0, 0 },
-        Token { TokenType::TK_STRING_LITERAL, 0, 0, "Foo bar"},
-        Token { TokenType::TK_SEMICOLON, 0, 0},
+    std::vector<Token> const desiredTokens {
+        Token { TokenType::TK_CHAR },
+        Token { TokenType::TK_STAR },
+        Token { TokenType::TK_IDENT, "x" },
+        Token { TokenType::TK_ASSIGNMENT },
+        Token { TokenType::TK_STRING_LITERAL, "Foo bar" },
+        Token { TokenType::TK_SEMICOLON },
     };
 
     EXPECT_EQ(desiredTokens, tokens);
