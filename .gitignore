@@ -1,6 +1,0 @@
-build/
-bin/
-.vscode/
-.idea/
-cmake-*/
-.metals/
