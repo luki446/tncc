@@ -25,7 +25,8 @@ impl Lexer for RegexLexer {
             r"(?P<lbrace>(\{|<%))|",
             r"(?P<rbrace>(\}|%>))|",
             r"(?P<star>\*)|",
-            r"(?P<semicolon>;)"
+            r"(?P<semicolon>;)|",
+            r"(?P<other>[^a-zA-Z0-9\s]+)"
         ))
         .unwrap();
 
@@ -67,6 +68,7 @@ impl Lexer for RegexLexer {
 
                     "auto" => Token::Auto,
                     "restrict" => Token::Restrict,
+                    "sizeof" => Token::Sizeof,
 
                     "return" => Token::Return,
                     "char" => Token::Char,
@@ -95,8 +97,10 @@ impl Lexer for RegexLexer {
                 Token::Comma
             } else if cap.name("semicolon").is_some() {
                 Token::Semicolon
+            } else if cap.name("other").is_some() {
+                Token::Invalid(cap.name("other").unwrap().as_str().to_string())
             } else {
-                Token::Ampersand
+                Token::Invalid(cap.name("other").unwrap().as_str().to_string())
             };
 
             tokens.push(token);
