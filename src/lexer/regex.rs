@@ -20,10 +20,10 @@ impl Lexer for RegexLexer {
             r"(?P<comma>,)|",
             r"(?P<lparen>\()|",
             r"(?P<rparen>\))|",
-            r"(?P<lsquare>\[)|",
-            r"(?P<rsquare>\])|",
-            r"(?P<lbrace>\{)|",
-            r"(?P<rbrace>\})|",
+            r"(?P<lsquare>(\[|<:))|",
+            r"(?P<rsquare>(\]|:>))|",
+            r"(?P<lbrace>(\{|<%))|",
+            r"(?P<rbrace>(\}|%>))|",
             r"(?P<star>\*)|",
             r"(?P<semicolon>;)"
         ))
@@ -33,6 +33,41 @@ impl Lexer for RegexLexer {
             let token = if cap.name("ident").is_some() {
                 match cap.name("ident").unwrap().as_str() {
                     "int" => Token::Int,
+                    "long" => Token::Long,
+                    "float" => Token::Float,
+                    "double" => Token::Double,
+                    "short" => Token::Short,
+                    "signed" => Token::Signed,
+                    "unsigned" => Token::Unsigned,
+                    "const" => Token::Const,
+                    "if" => Token::If,
+                    "else" => Token::Else,
+                    "extern" => Token::Extern,
+                    "for" => Token::For,
+                    "while" => Token::While,
+                    "break" => Token::Break,
+                    "continue" => Token::Continue,
+                    "do" => Token::Do,
+                    "switch" => Token::Switch,
+                    "case" => Token::Case,
+                    "default" => Token::Default,
+                    "goto" => Token::Goto,
+
+                    "void" => Token::Void,
+                    "static" => Token::Static,
+                    "volatile" => Token::Volatile,
+                    "typedef" => Token::Typedef,
+
+                    "inline" => Token::Inline,
+                    "register" => Token::Register,
+
+                    "struct" => Token::Struct,
+                    "enum" => Token::Enum,
+                    "union" => Token::Union,
+
+                    "auto" => Token::Auto,
+                    "restrict" => Token::Restrict,
+
                     "return" => Token::Return,
                     "char" => Token::Char,
                     ident => Token::Ident(ident.to_string()),
