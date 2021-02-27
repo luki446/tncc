@@ -2,6 +2,7 @@ mod cli;
 mod lexer;
 
 use lexer::lex::*;
+use lexer::token::*;
 use lexer::regex::RegexLexer;
 use std::fs;
 
@@ -15,7 +16,7 @@ fn main() {
     let tokens = lex_source::<RegexLexer>(source.clone());
 
     if opt.dump_lexer {
-        println!("{:#?}", tokens);
+        println!("{:#?}", LexingResult(tokens));
     } else {
         println!("{}", source);
     }

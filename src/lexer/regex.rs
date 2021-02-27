@@ -15,7 +15,7 @@ impl Lexer for RegexLexer {
         let mut tokens = Vec::new();
 
         let tokens_re = Regex::new(concat!(
-            r"(?P<ident>[a-z]+)|",
+            r"(?P<ident>[a-zA-Z_]+)|",
             r"(?P<number>[0-9]+)|",
             r"(?P<comma>,)|",
             r"(?P<lparen>\()|",
