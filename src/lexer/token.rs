@@ -1,6 +1,4 @@
-use std::borrow::Borrow;
-
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum Token {
     LefParen,    // (
     RightParen,  // )
@@ -65,7 +63,7 @@ pub enum Token {
 
 pub struct LexingResult(pub Vec<Token>);
 
-impl std::fmt::Debug for Token {
+impl std::fmt::Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Token::LefParen => write!(f, "(")?,
@@ -130,12 +128,12 @@ impl std::fmt::Debug for Token {
     }
 }
 
-impl std::fmt::Debug for LexingResult {
+impl std::fmt::Display for LexingResult {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let LexingResult(tokens) = self;
         writeln!(f, "[")?;
         for i in tokens {
-            writeln!(f, "\t{:?}", i)?;
+            writeln!(f, "\t{}", i)?;
         }
         writeln!(f, "]")?;
         Ok(())

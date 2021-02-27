@@ -16,7 +16,7 @@ fn main() {
     let tokens = lex_source::<RegexLexer>(source.clone());
 
     if opt.dump_lexer {
-        println!("{:#?}", LexingResult(tokens));
+        println!("{}", LexingResult(tokens));
     } else {
         println!("{}", source);
     }
