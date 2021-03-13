@@ -55,7 +55,7 @@ pub enum Token {
     Volatile,
     Unsigned,
 
-    Invalid(String),
+    Other(String),
 
     Ident(String),
     IntegerNumeral(i32),
@@ -121,7 +121,7 @@ impl std::fmt::Display for Token {
             Token::Unsigned => write!(f, "Keyword: unsigned")?,
             Token::Ident(ident) => write!(f, "Ident: {}", ident)?,
             Token::IntegerNumeral(num) => write!(f, "Integer constant: {}", num)?,
-            Token::Invalid(ident) => write!(f, "Invalid: '{}'", ident)?,
+            Token::Other(name) => write!(f, "Other token: {}", name)?
         }
         
         Ok(())

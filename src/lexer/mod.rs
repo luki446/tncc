@@ -8,7 +8,7 @@ mod tests {
 
     #[test]
     fn basic_return_expr_regex_lexer() {
-        let tokens = lex_source::<RegexLexer>("return 3;".to_string());
+        let tokens = lex_source::<RegexLexer>("return 3;".to_string()).unwrap();
 
         assert_eq!(vec![
             Token::Return,
@@ -19,7 +19,7 @@ mod tests {
 
     #[test]
     fn basic_function_prototype_regex_lexer() {
-        let tokens = lex_source::<RegexLexer>("void foo(    int *a, char b[]);".to_string());
+        let tokens = lex_source::<RegexLexer>("void foo(    int *a, char b[]);".to_string()).unwrap();
 
         assert_eq!(vec![
             Token::Void,

@@ -11,7 +11,7 @@ impl Lexer for RegexLexer {
         RegexLexer { source: src }
     }
 
-    fn lex(&mut self) -> Vec<Token> {
+    fn lex(&mut self) -> Result<Vec<Token>, Box<dyn std::error::Error>> {
         let mut tokens = Vec::new();
 
         let tokens_re = Regex::new(concat!(
@@ -98,14 +98,14 @@ impl Lexer for RegexLexer {
             } else if cap.name("semicolon").is_some() {
                 Token::Semicolon
             } else if cap.name("other").is_some() {
-                Token::Invalid(cap.name("other").unwrap().as_str().to_string())
+                Token::Other(cap.name("other").unwrap().as_str().to_string())
             } else {
-                Token::Invalid(cap.name("other").unwrap().as_str().to_string())
+                return Err("Unexpected token".into());
             };
 
             tokens.push(token);
         }
 
-        tokens
+        Ok(tokens)
     }
 }
